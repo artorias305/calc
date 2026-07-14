@@ -60,7 +60,7 @@ parse_term :: proc(p: ^Parser) -> ^AST_Node {
 
 	for p.pos < len(p.tokens) &&
 	    p.tokens[p.pos].type == .Operator &&
-	    (p.tokens[p.pos].literal == "*" || p.tokens[p.pos].literal == "-") {
+	    (p.tokens[p.pos].literal == "*" || p.tokens[p.pos].literal == "/") {
 		literal := p.tokens[p.pos].literal
 		p.pos += 1
 		right := parse_primary(p)
