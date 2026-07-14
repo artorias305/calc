@@ -28,7 +28,7 @@ main :: proc() {
 		root := parse(&parser)
 		result := evaluate(root)
 
-		fmt.printf("%f\n", result)
+		fmt.printf("%g\n", result)
 
 		delete(tokens)
 	}
