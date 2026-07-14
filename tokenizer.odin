@@ -3,8 +3,6 @@ package main
 TokenType :: enum {
 	Number,
 	Operator,
-	Asterisk,
-	Slash,
 	L_Paren,
 	R_Paren,
 }
@@ -71,6 +69,12 @@ tokenize :: proc(
 		case '/':
 			idx += 1
 			append(&tokens, new_token(.Operator, "/"))
+		case '%':
+			idx += 1
+			append(&tokens, new_token(.Operator, "%"))
+		case '^':
+			idx += 1
+			append(&tokens, new_token(.Operator, "^"))
 		case '(', ')':
 			tok := new_token(.L_Paren, "(") if char == '(' else new_token(.R_Paren, ")")
 			idx += 1

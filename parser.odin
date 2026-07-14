@@ -1,5 +1,6 @@
 package main
 
+import "core:math"
 import "core:strconv"
 
 // These will be leaves
@@ -12,6 +13,8 @@ Operator :: enum {
 	Sub,
 	Mul,
 	Div,
+	Mod,
+	Pow,
 }
 
 // binary node will be evaluated into a value
@@ -60,12 +63,20 @@ parse_term :: proc(p: ^Parser) -> ^AST_Node {
 
 	for p.pos < len(p.tokens) &&
 	    p.tokens[p.pos].type == .Operator &&
-	    (p.tokens[p.pos].literal == "*" || p.tokens[p.pos].literal == "/") {
+	    (p.tokens[p.pos].literal == "*" ||
+			    p.tokens[p.pos].literal == "/" ||
+			    p.tokens[p.pos].literal == "%" ||
+			    p.tokens[p.pos].literal == "^") {
 		literal := p.tokens[p.pos].literal
 		p.pos += 1
 		right := parse_primary(p)
 
-		op: Operator = .Mul if literal == "*" else .Div
+		op: Operator
+		if literal == "*" do op = .Mul
+		if literal == "/" do op = .Div
+		if literal == "%" do op = .Mod
+		if literal == "^" do op = .Pow
+
 		node := new(AST_Node, context.temp_allocator)
 		node^ = Binary_Node{op, left, right}
 		left = node
@@ -117,6 +128,13 @@ evaluate :: proc(node: ^AST_Node) -> f64 {
 		if n.op == .Div {
 			if right == 0 do panic("Division by zero")
 			return left / right
+		}
+		if n.op == .Mod {
+			if right == 0 do panic("Division by zero")
+			return math.mod_f64(left, right)
+		}
+		if n.op == .Pow {
+			return math.pow(left, right)
 		}
 
 		return 0
