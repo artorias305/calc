@@ -21,7 +21,10 @@ main :: proc() {
 			continue
 		}
 
-		parser := Parser{tokens = tokens, pos = 0}
+		parser := Parser {
+			tokens = tokens,
+			pos    = 0,
+		}
 		root := parse(&parser)
 		result := evaluate(root)
 
