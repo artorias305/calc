@@ -21,7 +21,11 @@ main :: proc() {
 			continue
 		}
 
-		fmt.printf("%v\n", tokens)
+		parser := Parser{tokens = tokens, pos = 0}
+		root := parse(&parser)
+		result := evaluate(root)
+
+		fmt.printf("%f\n", result)
 
 		delete(tokens)
 	}
