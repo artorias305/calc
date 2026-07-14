@@ -47,7 +47,7 @@ parse_expr :: proc(p: ^Parser) -> ^AST_Node {
 		right := parse_term(p)
 
 		op: Operator = .Add if literal == "+" else .Sub
-		node := new(AST_Node)
+		node := new(AST_Node, context.temp_allocator)
 		node^ = Binary_Node{op, left, right}
 		left = node
 	}
@@ -66,7 +66,7 @@ parse_term :: proc(p: ^Parser) -> ^AST_Node {
 		right := parse_primary(p)
 
 		op: Operator = .Mul if literal == "*" else .Div
-		node := new(AST_Node)
+		node := new(AST_Node, context.temp_allocator)
 		node^ = Binary_Node{op, left, right}
 		left = node
 	}
@@ -79,7 +79,7 @@ parse_primary :: proc(p: ^Parser) -> ^AST_Node {
 		value := strconv.parse_f64(p.tokens[p.pos].literal) or_else 0
 		p.pos += 1
 
-		node := new(AST_Node)
+		node := new(AST_Node, context.temp_allocator)
 		node^ = Number_Node{value}
 		return node
 	}
