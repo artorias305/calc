@@ -45,6 +45,13 @@ tokenize :: proc(
 				idx += 1
 			}
 
+			if idx < len(input) && input[idx] == '.' {
+				idx += 1
+				for idx < len(input) && input[idx] >= '0' && input[idx] <= '9' {
+					idx += 1
+				}
+			}
+
 			number_string := input[start:idx]
 			append(&tokens, new_token(.Number, number_string))
 
